@@ -1,7 +1,18 @@
 {
+  "name": "neo-design-patterns-hw-06",
+  "version": "1.0.0",
+  "description": "Homework 06 - Decorator and Proxy patterns",
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "ts-node src/main.ts",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "@types/node": "^25.6.2",
+    "@types/node": "^24.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "typescript": "^5.8.3"
   }
 }

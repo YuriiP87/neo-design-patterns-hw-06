@@ -1,56 +1,15 @@
-import { Author } from './models/Author';
-import { Book } from './models/Book';
-import { EBook } from './models/EBook';
-import { Copy } from './models/Copy';
-import { Reader } from './models/Reader';
-import { Library } from './models/Library';
-import { BorrowService } from './services/BorrowService';
-// import { AbstractBook } from './models/AbstractBook';
+import { MessageService } from "./MessageService";
+import { createRateLimitProxy } from "./RateLimitProxy";
 
-// Створення автора та книг
-const author = new Author('John Doe');
-const book = new Book('The Great Book', 2020, author);
-const ebook = new EBook('Digital Book', 2021, author, 'https://example.com/ebook');
+const messageService = new MessageService();
+const service = createRateLimitProxy(messageService, 1000);
 
-// Створення копій
-const copy1 = new Copy(book);
-const copy2 = new Copy(book);
+console.log("Тестуємо систему анти-спаму:");
 
-// Створення читача
-const reader = new Reader('1', 'Alice');
+service.send("Привіт! Як справи?");
 
-// Створення бібліотеки та додавання об'єктів
-const library = new Library();
+service.send("Чому не відповідаєш?");
 
-library.addAuthor(author);
-library.addBook(book);
-library.addBook(ebook);
-library.addCopy(copy1);
-library.addCopy(copy2);
-library.addReader(reader);
-
-// Створення сервісу позичання
-const borrowService = new BorrowService();
-
-// Демонстрація позичання
-console.log('Attempting to borrow copy1...');
-const borrowResult1 = borrowService.borrow(reader, copy1);
-console.log(`Borrow result: ${borrowResult1}`);
-
-console.log('Attempting to borrow copy1 again...');
-const borrowResult2 = borrowService.borrow(reader, copy1);
-console.log(`Borrow result: ${borrowResult2}`);
-
-// Демонстрація повернення
-console.log('Attempting to return copy1...');
-borrowService.returnBook(reader, copy1);
-console.log(`Copy1 is available: ${copy1.isCopyAvailable()}`);
-
-// Демонстрація поліморфізму
-console.log('\nBook descriptions:');
-console.log(book.getDescription());
-console.log(ebook.getDescription());
-
-// Спроба створити AbstractBook
-// const abstractBook = new AbstractBook('Test', 2022);
-// Повинно викликати помилку компіляції, тому що AbstractBook є abstract class.
+setTimeout(() => {
+  service.send("Це повідомлення вже пройде, бо ми почекали 1 секунду");
+}, 1100);
